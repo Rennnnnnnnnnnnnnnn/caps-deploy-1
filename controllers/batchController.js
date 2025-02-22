@@ -3,19 +3,27 @@ import db from '../config/database.js'; // Assuming your DB connection is set up
 import express from 'express';
 const router = express.Router();  // Correcting the router initialization
 
+
+
 // Create batch
 export const createBatch = async (req, res, next) => {
     const { batchName } = req.body;
-    const startDate = new Date(); // Batch starts today
+    const startDate = new Date();
+
+    console.log('Received request to create batch:', { batchName, startDate }); // Log the request
 
     try {
-        const [result] = await db.execute('INSERT INTO Batch (batch_name, start_date, is_active) VALUES (?, ?, ?)', 
-        [batchName, startDate, true]);
+        const [result] = await db.execute(
+            'INSERT INTO Batch (batch_name, start_date, is_active) VALUES (?, ?, ?)',
+            [batchName, startDate, true]
+        );
+        console.log('Batch created successfully:', result); // Log the result
         res.status(200).json({ batchId: result.insertId });
     } catch (err) {
+        console.error('Error creating batch:', err); // Log the error
         const error = new Error(`Unable to create batch`);
         error.status = 500;
-        next(error);  // Pass the error to the next middleware but do not send a response
+        next(error);
     }
 };
 
@@ -29,11 +37,13 @@ export const closeBatch = async (req, res, next) => {
         [endDate, batchId]);  // Update the column name to 'batch_id'
         res.status(200).send('Batch closed');
     } catch (err) {
+        console.error('Error closing batch:', err);
         const error = new Error(`Unable to close batch`);
         error.status = 500;
         next(error);  // Pass the error to the next middleware but do not send a response
     }
 }
+
 
 
 // Fetch the last active batch
