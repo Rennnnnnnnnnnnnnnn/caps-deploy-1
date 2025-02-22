@@ -51,7 +51,7 @@ export const closeBatch = async (req, res, next) => {
     const endDate = new Date(); // Batch closes today
 
     try {
-        await db.execute('UPDATE Batch SET is_active = false, end_date = ? WHERE batch_id = ?', 
+        await db.execute('UPDATE batch SET is_active = false, end_date = ? WHERE batch_id = ?', 
         [endDate, batchId]);  // Update the column name to 'batch_id'
         res.status(200).send('Batch closed');
     } catch (err) {
