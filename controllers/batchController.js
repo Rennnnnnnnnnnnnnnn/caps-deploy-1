@@ -22,7 +22,7 @@ export const createBatch = async (req, res, next) => {
     try {
         // Execute the database query
         const [result] = await db.execute(
-            'INSERT INTO Batch (batch_name, start_date, is_active) VALUES (?, ?, ?)',
+            'INSERT INTO batch (batch_name, start_date, is_active) VALUES (?, ?, ?)',
             [batchName, startDate, true]
         );
 
